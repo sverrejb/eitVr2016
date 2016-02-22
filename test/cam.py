@@ -1,35 +1,49 @@
 import numpy as np
 import cv2
 import scipy.ndimage
+import threading
 #from rift import PyRift
 
-cam1 = cv2.VideoCapture(1)
+cam1 = cv2.VideoCapture(0)
 cam2 = cv2.VideoCapture(1)
 
+## scaling ###
 cam1.set(3,1920)
 cam1.set(4,1080)
 
 cam2.set(3,1920)
 cam2.set(4,1080)
 
+class Buffer(object):
+    def __init__(self):
+        ret, self.right = cam1.read() 
+        ret, self.left = cam2.read()
+
 cv2.namedWindow('frame',cv2.WND_PROP_FULLSCREEN)
 
+buffer = Buffer()
+
+def update_left(buffer):
+    while True:
+        ret, buffer.left = cam1.read()
+
+
+def update_right(buffer):
+    while True:
+        ret, buffer.right = cam2.read()
+
+left_thread = threading.Thread(target = update_left, args = (buffer,))
+right_thread = threading.Thread(target = update_right, args = (buffer,))
+
+left_thread.start()
+right_thread.start()
+
 while(True):
-    # Capture frame-by-frame
-    # to threads?
-    ret1, frame1 = cam1.read()
-    ret2, frame2 = cam1.read()
 
-    # Our operations on the frame come here
+    #frame1 = frame1[0:1080, 480:1440] # Crop from x, y, w, h -> 100, 200, 300, 400
+    #frame2 = frame2[0:1080, 480:1440] # Crop from x, y, w, h -> 100, 200, 300, 400
 
-    frame1 = frame1[0:1080, 480:1440] # Crop from x, y, w, h -> 100, 200, 300, 400
-    frame2 = frame2[0:1080, 480:1440] # Crop from x, y, w, h -> 100, 200, 300, 400
-
-    frame = np.concatenate((frame1, frame2), axis=1)
-
-    
-    #frame = cv2.resize(frame, (0,0), fx=1.5, fy=1.5)
-    #frame = cv2.resize(frame,(1920, 1080), interpolation = cv2.INTER_CUBIC)
+    frame = np.concatenate((buffer.right, buffer.left), axis=1)
 
     # Display the resulting frame
     cv2.imshow('frame', frame)
