@@ -1,6 +1,6 @@
 import numpy as np
 import cv2
-import threading
+import multiprocessing
 from rift import PyRift
 
 
@@ -26,7 +26,6 @@ def update_right(buffer):
 
 
 if __name__ == '__main__':
-
     cam1 = cv2.VideoCapture(0)
     cam2 = cv2.VideoCapture(1)
 
@@ -34,11 +33,11 @@ if __name__ == '__main__':
 
     frame_buffer = Buffer()
 
-    left_thread = threading.Thread(target=update_left, args=(frame_buffer,))
-    right_thread = threading.Thread(target=update_right, args=(frame_buffer,))
+    left_thread = multiprocessing.Process(target=update_left, args=(frame_buffer,))
+    right_thread = multiprocessing.Process(target=update_right, args=(frame_buffer,))
 
-    right_thread.setDaemon(True)
-    left_thread.setDaemon(True)
+    right_thread.daemon = True
+    left_thread.daemon = True
 
     left_thread.start()
     right_thread.start()
