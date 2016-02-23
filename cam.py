@@ -1,7 +1,7 @@
 import numpy as np
 import cv2
 import threading
-# from rift import PyRift
+from rift import PyRift
 
 
 class Buffer(object):
@@ -25,32 +25,34 @@ def update_right(buffer):
         buffer.right = right_frame
 
 
-cam1 = cv2.VideoCapture(0)
-cam2 = cv2.VideoCapture(1)
+if __name__ == '__main__':
 
-cv2.namedWindow('frame', cv2.WND_PROP_FULLSCREEN)
+    cam1 = cv2.VideoCapture(0)
+    cam2 = cv2.VideoCapture(1)
 
-buffer = Buffer()
+    cv2.namedWindow('view', cv2.WND_PROP_FULLSCREEN)
 
-left_thread = threading.Thread(target=update_left, args=(buffer,))
-right_thread = threading.Thread(target=update_right, args=(buffer,))
+    frame_buffer = Buffer()
 
-right_thread.setDaemon(True)
-left_thread.setDaemon(True)
+    left_thread = threading.Thread(target=update_left, args=(frame_buffer,))
+    right_thread = threading.Thread(target=update_right, args=(frame_buffer,))
 
-left_thread.start()
-right_thread.start()
+    right_thread.setDaemon(True)
+    left_thread.setDaemon(True)
 
-while True:
-    frame = np.concatenate((buffer.left, buffer.right), axis=1)
-    frame = cv2.resize(frame, (1920, 1080), interpolation=cv2.INTER_CUBIC)
+    left_thread.start()
+    right_thread.start()
 
-    # Display the resulting frame
-    cv2.imshow('frame', frame)
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        break
+    while True:
+        frame = np.concatenate((frame_buffer.left, frame_buffer.right), axis=1)
+        frame = cv2.resize(frame, (1920, 1080), interpolation=cv2.INTER_CUBIC)
 
-# When everything done, release the capture
-cam1.release()
-cam2.release()
-cv2.destroyAllWindows()
+        # Display the resulting frame
+        cv2.imshow('view', frame)
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
+
+    # When everything done, release the capture
+    cam1.release()
+    cam2.release()
+    cv2.destroyAllWindows()
