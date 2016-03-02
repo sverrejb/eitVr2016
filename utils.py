@@ -2,12 +2,14 @@
 from threading import Thread
 import cv2
 
+
 class WebcamVideoStream:
     def __init__(self, src=0):
         # initialize the video camera stream and read the first frame
         # from the stream
         self.stream = cv2.VideoCapture(src)
         (self.grabbed, self.frame) = self.stream.read()
+
 
         # initialize the variable used to indicate if the thread should
         # be stopped
@@ -28,8 +30,11 @@ class WebcamVideoStream:
                 return
 
             # otherwise, read the next frame from the stream
-            (self.grabbed, tmp) = self.stream.read()
-            self.frame = tmp[0:1080, 480:1440]
+            try:
+                (self.grabbed, tmp) = self.stream.read()
+                self.frame = tmp[0:1080, 480:1440]
+            except:
+                pass
 
     def read(self):
         # return the frame most recently read
