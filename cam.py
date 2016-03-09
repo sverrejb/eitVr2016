@@ -10,6 +10,10 @@ if __name__ == '__main__':
 
     cv2.namedWindow('view', cv2.WND_PROP_FULLSCREEN)
 
+    foo = PyRift()
+
+    foo.
+
     while True:
 
         left_frame = left.read()
