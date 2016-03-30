@@ -6,5 +6,5 @@ s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.connect((HOST, PORT))
 
 for i in range(100):
-    s.send("hello")
+    s.send(str(i))
 s.close()

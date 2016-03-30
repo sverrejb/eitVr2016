@@ -1,8 +1,6 @@
 import numpy as np
 import cv2
 from utils import WebcamVideoStream
-from rift import PyRift
-
 
 if __name__ == '__main__':
     left = WebcamVideoStream(src=0).start()
@@ -11,7 +9,6 @@ if __name__ == '__main__':
     cv2.namedWindow('view', cv2.WND_PROP_FULLSCREEN)
 
     while True:
-
         left_frame = left.read()
         right_frame = right.read()
 
