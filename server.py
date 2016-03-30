@@ -18,10 +18,12 @@ pwm2 = GPIO.PWM(8, 100)
 pwm1.start(5)
 pwm2.start(5)
 
-def update(angle):
-    duty = float(angle) / 10.0 + 2.5
-    pwm1.ChangeDutyCycle(duty)
-    pwm2.ChangeDutyCycle(duty)
+def update(xaxis, yaxis):
+    duty1 = float(xaxis) / 10.0 + 2.5
+    duty2 = float(yaxis) / 10.0 + 2.5
+
+    pwm1.ChangeDutyCycle(duty1)
+    pwm2.ChangeDutyCycle(duty2)
 
 
 
@@ -32,7 +34,8 @@ while True:
         data = data.decode("utf-8")
         angles = str(data).split(',')
         xaxis = angles[0]
-        update(xaxis)
+        yaxis = angles[1]
+        update(xaxis, yaxis)
 conn.close()
 
 
