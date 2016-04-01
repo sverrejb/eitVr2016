@@ -9,7 +9,6 @@ def to_angles(quaterions):
     q_2 = quaterions[2]
     q_3 = quaterions[3]
 
-
     theta = asin(2 * (q_0 * q_2 - q_3 * q_1))
     theta = (theta * 180) / pi
 
@@ -30,7 +29,7 @@ if __name__ == '__main__':
         hmd.poll()
         quaternions = hmd.rotation
         theta, psi = to_angles(quaternions)
-        payload = str(theta).zfill(3)+","+ str(psi).zfill(3)
+        payload = str(theta).zfill(3)+"," + str(psi).zfill(3)
         s.send(payload)
 
 s.close()

@@ -1,7 +1,6 @@
 import socket
 import RPi.GPIO as GPIO
 
-
 HOST = ''                 # Symbolic name meaning all available interfaces
 PORT = 50007              # Arbitrary non-privileged port
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -25,8 +24,6 @@ def update(xaxis, yaxis):
     pwm1.ChangeDutyCycle(duty1)
     pwm2.ChangeDutyCycle(duty2)
 
-
-
 print('Connected by', addr)
 while True:
     data = conn.recv(7)
@@ -37,11 +34,3 @@ while True:
         yaxis = angles[1]
         update(xaxis, yaxis)
 conn.close()
-
-
-
-
-
-
-
-

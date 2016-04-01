@@ -15,12 +15,10 @@ if __name__ == '__main__':
         frame = np.concatenate((left_frame, right_frame), axis=1)
         frame = cv2.resize(frame, (1920, 1080), interpolation=cv2.INTER_NEAREST)
 
-        # Display the resulting frame
         cv2.imshow('view', frame)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             left.stop()
             right.stop()
             break
 
-    # When everything done, release the capture
     cv2.destroyAllWindows()
